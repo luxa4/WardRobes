@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <!--<action-state id="check" >-->
+        <!--<evaluate expression="userServiceImpl.getYesOrNo()" />-->
+        <!--<transition on="yes" to="success" />-->
+        <!--<transition on="no" to="failure" />-->
+    <!--</action-state>-->
+
+    <var name="user" class="ru.belyaev.entity.User" />
+
+    <!--<action-state id="currentUser" >-->
+        <!--<evaluate expression="userServiceImpl.getFirstOrder(requestParameters.id)" result="user" />-->
+        <!--<transition to="activation"/>-->
+    <!--</action-state>-->
+
+    <view-state id="activation" view="activation.jsp" >
+        <transition on="activate" to="registr"/>
+        <transition on="cancel" to="failure"/>
+    </view-state>
+
+    <subflow-state id="registr" subflow="registry">
+        <input name="user" required="true" />
+        <output name="code" required="true"/>
+    </subflow-state>
+
+    <view-state id="success" view="success.jsp" />
+    <view-state id="failure" view="failure.jsp" />
+
+</flow>
