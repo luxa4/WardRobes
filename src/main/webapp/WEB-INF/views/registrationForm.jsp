@@ -13,9 +13,12 @@
 </head>
 <body>
 <spring:form method="post" action="/registration" modelAttribute="UserFromRegistrationForm" >
+    Name
     <spring:input path="name" />
+    Password
     <spring:input path="password" />
-    <%--<spring:input path="email" />--%>
+    Email
+    <spring:input path="email" />
     <spring:button name="ok" value="Add user">Add User</spring:button>
 </spring:form>
 </body>

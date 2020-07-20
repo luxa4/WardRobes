@@ -34,7 +34,7 @@ public class ProductController {
     public String showPersonalProductPage(@PathVariable int productId, Model model) {
         Product product = productService.showProductPageByProductId(productId);
         model.addAttribute("product", product);
-        return "presentPageProduct";
+        return "oneProductPage";
     }
 
 

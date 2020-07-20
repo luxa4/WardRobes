@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name ="product")
@@ -42,6 +43,9 @@ public class Product {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column
+    private Integer totalCount;
+
     public Product() {
     }
 
@@ -51,6 +55,14 @@ public class Product {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 
     public String getName() {
@@ -107,6 +119,27 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(length, product.length) &&
+                Objects.equals(width, product.width) &&
+                Objects.equals(height, product.height) &&
+                Objects.equals(price, product.price) &&
+                Objects.equals(status, product.status) &&
+                Objects.equals(imageUrl, product.imageUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, length, width, height, price, status, imageUrl);
     }
 
     @Override

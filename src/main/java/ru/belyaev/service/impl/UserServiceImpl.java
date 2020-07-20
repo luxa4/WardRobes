@@ -22,7 +22,9 @@ import ru.belyaev.entity.User;
 import ru.belyaev.repository.RoleRepository;
 import ru.belyaev.repository.UserRepository;
 import ru.belyaev.service.UserService;
+import ru.belyaev.util.SessionUtil;
 
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -41,19 +43,26 @@ public class UserServiceImpl implements UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    HttpSession session;
+
     @Transactional
     @Override
     public void addUser(User userFromForm) {
         User user = new User();
         user.setName(userFromForm.getName());
         user.setPassword(bCryptPasswordEncoder.encode(userFromForm.getPassword()));
+        user.setEmail(userFromForm.getEmail());
         user.setRoles(Arrays.asList(roleRepository.findRoleByRole("ROLE_USER")));
         userRepository.save(user);
+        System.out.println("Добавлен новый пользователь - " + user.getName());
+        LOGGER.info("Добавлен новый пользователь");
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.findUserByName(s);
+        System.out.println("Найден пользователь - " + user.getName());
         LOGGER.info("was called method for authentication, parameters - {} , {} , {} ", user.getName(), user.getPassword(), user.getRoles().toString());
         return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }

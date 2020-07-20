@@ -31,7 +31,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <c:forEach var="product" items="${productList}">
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-2 col-xl-2" >
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2" >
                             <div class="myCard" style="width: 18rem;">
                                 <img src="${product.imageUrl}" class="card-img-top" alt="...">
                                 <div class="card-body">
