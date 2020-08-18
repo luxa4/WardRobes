@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="ApplicationTest" verbose="1">
+    <test name="Controllers">
+        <parameter name="productId" value="1" />
+        <parameter name="count" value="1" />
+        <classes>
+            <class name="ru.belyaev.controller.ajax.AddToShoppingCartControllerTest" />
+            <class name="ru.belyaev.controller.ProductControllerTest" />
+            <class name="ru.belyaev.controller.AuthenticationControllerTest" />
+            <class name="ru.belyaev.controller.ShoppingCartControllerTest" />
+            <class name="ru.belyaev.controller.ajax.RemoveFromShoppingCartControllerTest"/>
+            <class name="ru.belyaev.controller.ajax.SearchControllerTest" />
+        </classes>
+    </test>
+    <test name="Services">
+        <classes>
+            <class name="ru.belyaev.service.impl.OrderServiceImplTest" />
+            <class name="ru.belyaev.service.impl.ProductServiceImplTest" />
+            <class name="ru.belyaev.service.impl.ShoppingCartServiceImplTest" />
+            <class name="ru.belyaev.service.impl.UserServiceImplTest" />
+        </classes>
+    </test>
+</suite>
+
+
+
+

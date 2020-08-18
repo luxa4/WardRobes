@@ -19,32 +19,25 @@
     <hibernate-version>5.4.17.Final</hibernate-version>
     <spring-data-jpa>2.3.1.RELEASE</spring-data-jpa>
     <h2database-version>1.4.200</h2database-version>
-
     <spring-web-flow>2.5.1.RELEASE</spring-web-flow>
-
     <spirng-security>5.3.3.RELEASE</spirng-security>
-
     <lombok-version>1.18.12</lombok-version>
     <jstl-version>1.2</jstl-version>
     <jackson-databind-version>2.11.1</jackson-databind-version>
 
-
     <!--Test API-->
-    <junit-version>4.12</junit-version>
-    <assertj-version>3.16.1</assertj-version>
-    <mockito-version>3.3.3</mockito-version>
-    <hamcrest-version>2.2</hamcrest-version>
-
     <testNg-version>7.1.0</testNg-version>
+    <mockito-version>3.3.3</mockito-version>
+    <assertj-version>3.16.1</assertj-version>
   </properties>
 
   <dependencies>
 
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit-version}</version>
-      <scope>test</scope>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>${testNg-version}</version>
+    <scope>test</scope>
     </dependency>
 
     <dependency>
@@ -55,27 +48,18 @@
     </dependency>
 
     <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest</artifactId>
-      <version>${hamcrest-version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>${mockito-version}</version>
       <scope>test</scope>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
       <version>${spring-version}</version>
       <scope>test</scope>
     </dependency>
-
 
     <dependency>
       <groupId>org.springframework</groupId>
@@ -137,14 +121,6 @@
       <version>${spring-web-flow}</version>
     </dependency>
 
-
-    <!--<dependency>-->
-      <!--<groupId>org.testng</groupId>-->
-      <!--<artifactId>testng</artifactId>-->
-      <!--<version>${testNg-version}</version>-->
-      <!--<scope>test</scope>-->
-    <!--</dependency>-->
-
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
@@ -181,19 +157,10 @@
       <version>1.7.30</version>
     </dependency>
 
-
-
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>4.0.1</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>${lombok-version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -204,14 +171,17 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>${jackson-databind-version}</version>
     </dependency>
-
-
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>RELEASE</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>

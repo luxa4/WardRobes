@@ -6,6 +6,7 @@ import ru.belyaev.entity.User;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class SessionUtil {
 
@@ -14,7 +15,7 @@ public class SessionUtil {
 
         if (currentShoppingCart == null) {
             currentShoppingCart = new ShoppingCart();
-            currentShoppingCart.setShoppingCartItems(new HashMap<>());
+            currentShoppingCart.setShoppingCartItems(new HashSet<>());
             session.setAttribute("currentShoppingCart", currentShoppingCart);
         }
         return currentShoppingCart;

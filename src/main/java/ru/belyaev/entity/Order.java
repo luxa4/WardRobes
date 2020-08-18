@@ -8,13 +8,15 @@
 package ru.belyaev.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "\"order\"")
-public class Order {
+public class Order implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +27,15 @@ public class Order {
     @JoinColumn(name = "id_user")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Product> productList;
-
-    @Column
-    private BigDecimal totalCount;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "order")
+    private Set<OrderItem> orderItemsList;
 
     @Column
     private Timestamp created;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_address")
+    private Address address;
 
     public Order() {
     }
@@ -53,21 +56,22 @@ public class Order {
         this.user = user;
     }
 
-    public List<Product> getProductList() {
-        return productList;
+    public Set<OrderItem> getOrderItemsList() {
+        return orderItemsList;
     }
 
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setOrderItemsList(Set<OrderItem> orderItemsList) {
+        this.orderItemsList = orderItemsList;
     }
 
-    public BigDecimal getTotalCount() {
-        return totalCount;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setTotalCount(BigDecimal totalCount) {
-        this.totalCount = totalCount;
+    public void setAddress(Address address) {
+        this.address = address;
     }
+
 
     public Timestamp getCreated() {
         return created;
@@ -80,8 +84,7 @@ public class Order {
     @Override
     public String toString() {
         return "Order{user=" + user +
-                ", productList=" + productList +
-                ", totalCount=" + totalCount +
+                ", productList=" + orderItemsList +
                 ", created=" + created +
                 '}';
     }

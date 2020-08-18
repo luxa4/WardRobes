@@ -7,15 +7,12 @@
 
 package ru.belyaev.entity;
 
-import lombok.EqualsAndHashCode;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name="user")
-@EqualsAndHashCode
 public class User implements Serializable {
 
     @Id
@@ -39,6 +36,10 @@ public class User implements Serializable {
     private List<Role> roles;
 
     public User() {
+    }
+
+    public User(String name) {
+        this.name = name;
     }
 
     public Integer getId() {
@@ -79,5 +80,16 @@ public class User implements Serializable {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

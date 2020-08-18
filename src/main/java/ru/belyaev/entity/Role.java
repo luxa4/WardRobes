@@ -8,11 +8,12 @@
 package ru.belyaev.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "role")
-public class Role {
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +23,11 @@ public class Role {
     @Column
     private String role;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable (name = "user_role",
     joinColumns = @JoinColumn(name = "id_role"),
     inverseJoinColumns = @JoinColumn(name = "id_user"))
     private List<User> users;
-
 
     public Role() {
     }

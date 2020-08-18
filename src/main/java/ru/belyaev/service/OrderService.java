@@ -6,5 +6,12 @@
 
 package ru.belyaev.service;
 
+import ru.belyaev.entity.Address;
+import ru.belyaev.entity.Order;
+import ru.belyaev.entity.ShoppingCart;
+import ru.belyaev.entity.User;
+
 public interface OrderService {
+
+    Order makeOrder(Order order, User user);
 }

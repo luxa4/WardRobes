@@ -7,12 +7,12 @@ import ru.belyaev.entity.Product;
 import ru.belyaev.entity.ShoppingCart;
 import ru.belyaev.entity.ShoppingCartItem;
 
-import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface ShoppingCartItemRepository extends JpaRepository<ShoppingCartItem, Long> {
 
-    List<ShoppingCartItem> getShoppingCartItemByShoppingCart(ShoppingCart shoppingCart);
+    Set<ShoppingCartItem> getShoppingCartItemByShoppingCart(ShoppingCart shoppingCart);
 
     ShoppingCartItem findShoppingCartItemByShoppingCartAndProduct(ShoppingCart shoppingCart, Product product);
 

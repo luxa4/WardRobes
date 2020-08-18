@@ -1,15 +1,20 @@
 package ru.belyaev.service;
 
 import ru.belyaev.entity.Product;
+import ru.belyaev.entity.ShoppingCart;
 import ru.belyaev.entity.User;
+
+import javax.servlet.http.HttpSession;
 
 public interface ShoppingCartService {
 
-    void addToShoppingCart(int productId, int count);
+    ShoppingCart addToShoppingCart(int productId, int count);
 
-    void removeFromShoppingCart(int productId, int count);
+    ShoppingCart removeFromShoppingCart(int productId, int count);
 
-    void refreshTotalCount();
-    void refreshTotalCost();
+    void removeShoppingCart(ShoppingCart shoppingCart, HttpSession session);
+
+    ShoppingCart getUserShoppingCart();
+
 
 }

@@ -8,11 +8,12 @@
 package ru.belyaev.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "shopping_cart_item")
-public class ShoppingCartItem {
+public class ShoppingCartItem implements Serializable {
 
     @Id
     @Column

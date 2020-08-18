@@ -10,12 +10,25 @@ package ru.belyaev.entity;
 import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@NamedQuery(name = "Product.findMaxHeight", query = "SELECT MAX(height) FROM Product")
+@NamedQuery(name = "Product.findMinHeight", query = "SELECT MIN(height) FROM Product")
+@NamedQuery(name = "Product.findMaxWidth", query = "SELECT MAX(width) FROM Product")
+@NamedQuery(name = "Product.findMinWidth", query = "SELECT MIN(width) FROM Product")
+@NamedQuery(name = "Product.findMaxLength", query = "SELECT MAX(length) FROM Product")
+@NamedQuery(name = "Product.findMinLength", query = "SELECT MIN(length) FROM Product")
+@NamedQuery(name = "Product.findMaxPrice", query = "SELECT MAX(price) FROM Product")
+@NamedQuery(name = "Product.findMinPrice", query = "SELECT MIN(price) FROM Product")
+@NamedQuery(name = "Product.searchFilters", query = "SELECT p FROM Product p WHERE (p.length between ?1 and ?2) and (p.width between ?3 and ?4) and (p.height between ?5 and ?6) and " +
+        "(p.price between ?7 and ?8)")
+@NamedQuery(name = "Product.searchFiltersCount", query = "SELECT count(p) FROM Product p WHERE (p.length between ?1 and ?2) and (p.width between ?3 and ?4) and (p.height between ?5 and ?6) and " +
+        "(p.price between ?7 and ?8)")
 @Entity
 @Table(name ="product")
-public class Product {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

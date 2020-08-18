@@ -19,14 +19,12 @@ import ru.belyaev.service.ShoppingCartService;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(ShoppingCartService.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(ShoppingCartServiceImpl.class);
 
     @Autowired
     UserRepository userRepository;
@@ -38,38 +36,35 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     ShoppingCartRepository shoppingCartRepository;
 
     @Autowired
-    HttpSession session;
-
-    ShoppingCart shoppingCart;
-
-    List<ShoppingCartItem> list;
-
-    @Autowired
     ProductRepository productRepository;
 
+    @Override
+    public ShoppingCart getUserShoppingCart() {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        User user = getCurrentUser();
+        return shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
+    }
 
     @Override
     @Transactional
-    public void addToShoppingCart(int productId, int count) {
+    public ShoppingCart addToShoppingCart(int productId, int count) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        User user = userRepository.findUserByName(name);
+        User user = getCurrentUser();
 
         Product productToCart = productRepository.findProductById(productId);
-        LOGGER.info("--->>> Найден продукт - {} в количестве - {}", productToCart.getName(), count);
+        LOGGER.info("--->>> Found product by ID");
 
-        LOGGER.info("--->>> Ищем корзину .... ");
-        shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
-
+        LOGGER.info("--->>> Searching cart.... ");
+        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
 
         if(shoppingCart == null) {
-            LOGGER.info("--->>> Корзина не найдена, создаем новую...");
+            LOGGER.info("--->>> The Cart is't found, creating new ..");
             shoppingCart = new ShoppingCart();
             shoppingCart.setUser(user);
-            LOGGER.info("--->>> Пользователь корзины c id - {}", shoppingCart.getUser().getId());
-            shoppingCartRepository.saveAndFlush(shoppingCart);
-            LOGGER.info("--->>> Сохранили корзину в базе");
+            shoppingCart.setTotalCount(0);
+            shoppingCart.setTotalCost(BigDecimal.valueOf(0));
+            shoppingCartRepository.save(shoppingCart);
+            LOGGER.info("--->>> Save Cart into DataBase");
         }
 
         ShoppingCartItem existProductInShoppingCart = shoppingCartItemRepository.findShoppingCartItemByShoppingCartAndProduct(shoppingCart, productToCart);
@@ -77,80 +72,83 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (existProductInShoppingCart == null) {
             LOGGER.info("--->>> Данного продукта в корзине еще не было, добавляем как новый");
             ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
-            shoppingCartItem.setProduct(productToCart);
             shoppingCartItem.setShoppingCart(shoppingCart);
+            shoppingCartItem.setProduct(productToCart);
             shoppingCartItem.setCount(count);
-            shoppingCartItemRepository.save(shoppingCartItem);
+            shoppingCart.getShoppingCartItems().add(shoppingCartItem);
             LOGGER.info("--->>> Добавили товар в корзину");
         } else {
             LOGGER.info("--->>> Данный продукт в корзине уже был, обновляем кол-во");
+            shoppingCart.getShoppingCartItems().remove(existProductInShoppingCart);
             existProductInShoppingCart.setCount(existProductInShoppingCart.getCount() + count);
-            shoppingCartItemRepository.saveAndFlush(existProductInShoppingCart);
+            shoppingCart.getShoppingCartItems().add(existProductInShoppingCart);
             LOGGER.info("--->>> Обновили товар в корзине");
         }
-
-//        shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
-////
-//        refreshTotalCount(shoppingCart);
-////        refreshTotalCost(shoppingCart);
-////
-////        LOGGER.info("Общее кол-во - {}", shoppingCart.getTotalCount());
-////        LOGGER.info("Общая стоимость - {}", shoppingCart.getTotalCost());
+        refreshTotalCount(shoppingCart);
+        refreshTotalCost(shoppingCart);
+        shoppingCartRepository.save(shoppingCart);
+        return shoppingCart;
     }
-
 
     @Override
     @Transactional
-    public void removeFromShoppingCart(int productId, int count) {
-
+    public ShoppingCart removeFromShoppingCart(int productId, int count) {
+        User user = getCurrentUser();
+        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
         Product product = productRepository.findProductById(productId);
-
         ShoppingCartItem existProductInShoppingCart = shoppingCartItemRepository.findShoppingCartItemByShoppingCartAndProduct(shoppingCart, product);
 
         if (existProductInShoppingCart != null) {
-            if (existProductInShoppingCart.getCount() <= count) {
-                shoppingCart.getShoppingCartItems().remove(existProductInShoppingCart);
+            if (existProductInShoppingCart.getCount() > count) {
+                existProductInShoppingCart.setCount(existProductInShoppingCart.getCount()-count);
+                shoppingCart.getShoppingCartItems().add(existProductInShoppingCart);
+                shoppingCartItemRepository.save(existProductInShoppingCart);
+                LOGGER.info("--->>> Удалили часть продукта");
             } else {
-                shoppingCart.getShoppingCartItems().get(existProductInShoppingCart.getProduct().getId()).
-                        setCount(shoppingCart.getShoppingCartItems().get(existProductInShoppingCart.getProduct().getId()).getCount()-count);
+                LOGGER.info("--->>> Начать удаление");
+                shoppingCart.getShoppingCartItems().remove(existProductInShoppingCart);
+                LOGGER.info("--->>> Удалили весь продукт");
             }
-            shoppingCartItemRepository.save(existProductInShoppingCart);
-        } else {
-            existProductInShoppingCart.setCount(existProductInShoppingCart.getCount() + count);
-            shoppingCartItemRepository.save(existProductInShoppingCart);
         }
-
-//        refreshTotalCost(shoppingCart);
-//        refreshTotalCount(shoppingCart);
+        refreshTotalCount(shoppingCart);
+        refreshTotalCost(shoppingCart);
+        shoppingCartRepository.saveAndFlush(shoppingCart);
+        LOGGER.info("--->>> Сохранение - {} - {}", shoppingCart.getTotalCount(), shoppingCart.getTotalCost());
+        return shoppingCart;
     }
 
-    public void refreshTotalCount(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        User user = userRepository.findUserByName(name);
-        shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
-        list = shoppingCartItemRepository.getShoppingCartItemByShoppingCart(shoppingCart);
+    @Override
+    public void removeShoppingCart(ShoppingCart shoppingCart, HttpSession session) {
+        shoppingCart = null;
+        session.removeAttribute("shoppingCart");
+    }
+
+    private void refreshTotalCount(ShoppingCart ThisShoppingCart){
+        User user = getCurrentUser();
+        Set<ShoppingCartItem> list = shoppingCartRepository.findShoppingCartByUser(user).getShoppingCartItems();
         int totalCount = 0;
         for(ShoppingCartItem item: list) {
             totalCount = totalCount + item.getCount();
         }
-        shoppingCart.setTotalCount(totalCount);
-        LOGGER.info("Общее кол-во - {}", shoppingCart.getTotalCount());
-
+        ThisShoppingCart.setTotalCount(totalCount);
+        LOGGER.info("Общее кол-во - {}", ThisShoppingCart.getTotalCount());
     }
 
-    public void refreshTotalCost() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        User user = userRepository.findUserByName(name);
-        shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
-        list = shoppingCartItemRepository.getShoppingCartItemByShoppingCart(shoppingCart);
+    private void refreshTotalCost(ShoppingCart ThisShoppingCart) {
+        User user = getCurrentUser();
+        Set<ShoppingCartItem> list = shoppingCartRepository.findShoppingCartByUser(user).getShoppingCartItems();
         BigDecimal totalCost = BigDecimal.valueOf(0.00);
         for(ShoppingCartItem item: list) {
             totalCost = totalCost.add(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getCount())));
         }
-        shoppingCart.setTotalCost(totalCost);
-        LOGGER.info("Общая стоимость - {}", shoppingCart.getTotalCost());
+        ThisShoppingCart.setTotalCost(totalCost);
+        LOGGER.info("Общая стоимость - {}", ThisShoppingCart.getTotalCost());
     }
 
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User user = userRepository.findUserByName(name);
+        return user;
+    }
 }

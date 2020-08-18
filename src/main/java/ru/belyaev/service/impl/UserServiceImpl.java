@@ -10,8 +10,10 @@ package ru.belyaev.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,6 +48,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     HttpSession session;
 
+
+    public User getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User user = userRepository.findUserByName(name);
+        return user;
+    }
+
     @Transactional
     @Override
     public void addUser(User userFromForm) {
@@ -62,8 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userRepository.findUserByName(s);
-        System.out.println("Найден пользователь - " + user.getName());
-        LOGGER.info("was called method for authentication, parameters - {} , {} , {} ", user.getName(), user.getPassword(), user.getRoles().toString());
+        LOGGER.info("Was called method for authentication, parameters - {} ", user.getName());
         return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 

@@ -8,34 +8,40 @@
 package ru.belyaev.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Table(name = "shopping_cart")
-public class ShoppingCart {
+public class ShoppingCart implements Serializable {
 
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "shoppingCart")
-    Map<Integer,ShoppingCartItem> shoppingCartItems;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<ShoppingCartItem> shoppingCartItems;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user")
     private User user;
 
-    @Transient
+    @Column(name = "total_count")
     private int totalCount;
 
-    @Transient
+    @Column(name = "total_cost")
     private BigDecimal totalCost;
 
+
     public ShoppingCart() {
-        this.shoppingCartItems = new HashMap<>();
+        this.shoppingCartItems = new HashSet<>();
+    }
+
+    public ShoppingCart(int totalCount, BigDecimal totalCost) {
+        this.totalCount = totalCount;
+        this.totalCost = totalCost;
     }
 
     public ShoppingCart(User user) {
@@ -50,11 +56,11 @@ public class ShoppingCart {
         this.id = id;
     }
 
-    public Map<Integer, ShoppingCartItem> getShoppingCartItems() {
+    public Set<ShoppingCartItem> getShoppingCartItems() {
         return shoppingCartItems;
     }
 
-    public void setShoppingCartItems(Map<Integer, ShoppingCartItem> shoppingCartItems) {
+    public void setShoppingCartItems(Set<ShoppingCartItem> shoppingCartItems) {
         this.shoppingCartItems = shoppingCartItems;
     }
 
