@@ -45,10 +45,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    HttpSession session;
-
-
+    @Override
     public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();

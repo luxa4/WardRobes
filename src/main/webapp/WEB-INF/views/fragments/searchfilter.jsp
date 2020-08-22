@@ -7,17 +7,16 @@
 --%>
 
 <aside class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
-           <form action="#" method="get">
+           <form action="/searchProduct" method="get">
                 <div class="d-flex flex-row justify-content-center">
-                    <input class="form-control btn_search" type="text" placeholder="Search...">
-                    <button class="btn btn-secondary btn_search ml-1 "><i class="fas fa-search normal "></i></button>
+                    <input class="form-control btn_search" type="text" name="fragment" placeholder="Search...">
+                    <button type="submit" class="btn btn-secondary btn_search ml-1 "><i class="fas fa-search normal "></i></button>
                 </div>
             </form>
     <ul class="list-group mt-4">
         <li class="list-group-item active bg-light sh-b">Filter</li>
         <li class="list-group-item" >
             <div class="form-inline justify-content-start" >
-
                 <div class="polzunok-container-5">
                     <div class="polzunok_inner">
                         <div class="polzunok_label">Length</div>
@@ -28,7 +27,6 @@
                     </div>
                     <div class="polzunok-5"></div>
                 </div>
-
 
                 <div class="polzunok-container-4">
                     <div class="polzunok_inner">

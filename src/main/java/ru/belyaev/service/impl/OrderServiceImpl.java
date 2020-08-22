@@ -16,10 +16,12 @@ import ru.belyaev.repository.OrderItemRepository;
 import ru.belyaev.repository.OrderRepository;
 import ru.belyaev.repository.ShoppingCartRepository;
 import ru.belyaev.service.OrderService;
-import ru.belyaev.service.ShoppingCartService;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -35,20 +37,21 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Order makeOrder(Order order, User user) {
-
-        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
+    public Order makeOrder(ShoppingCart shoppingCart, User user, Address address) {
 
         if (shoppingCart == null || shoppingCart.getShoppingCartItems().isEmpty()) {
             throw new InternalServerErrorException("Shopping cart is null or empty");
         }
 
         try {
+            Order order = new Order();
             order.setUser(user);
+            order.setAddress(address);
             order.setCreated(new Timestamp(System.currentTimeMillis()));
             // добавление в базу элементов, созданного заказ
-            Set<OrderItem> listOrderItems = toOrderItemParameterList(order,shoppingCart.getShoppingCartItems());
+            Set<OrderItem> listOrderItems = toOrderItemParameterList(order, shoppingCart.getShoppingCartItems());
             order.setOrderItemsList(listOrderItems);
+            order.setExecutionStatus("preparation for shipment");
             orderRepository.save(order);
             shoppingCartRepository.delete(shoppingCart);
             return order;
@@ -67,5 +70,20 @@ public class OrderServiceImpl implements OrderService {
             parameterList.add(orderItem);
         }
         return parameterList;
+    }
+
+    @Override
+    public List<Order> findUserOrders(User user) {
+        return orderRepository.findAllByUser(user);
+    }
+
+    @Override
+    public long findCountUserOrders(User user) {
+        return orderRepository.countOrderByUser(user);
+    }
+
+    @Override
+    public Order findOrderById(long id) {
+        return orderRepository.findOrderById(id);
     }
 }

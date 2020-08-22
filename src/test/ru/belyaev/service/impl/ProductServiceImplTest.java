@@ -116,4 +116,17 @@ public class ProductServiceImplTest {
                                                                         BigDecimal.valueOf(1),BigDecimal.valueOf(1),
                                                                         BigDecimal.valueOf(1));
     }
+
+    @Test
+    public void testFindProductForSearchTextForm() {
+        productService.findProductForSearchTextForm("hemnes");
+        verify(productRepository, times(1)).findProductsByNameContainingIgnoreCase("hemnes");
+    }
+
+    @Test
+    public void testCountProductForSearchTextForm() {
+        productService.countProductForSearchTextForm("hemnes");
+        verify(productRepository, times(1)).countProductByNameContainingIgnoreCase("hemnes");
+    }
+
 }

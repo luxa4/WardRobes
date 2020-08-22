@@ -15,6 +15,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.belyaev.config.ApplicationConfig;
 import ru.belyaev.entity.ShoppingCart;
+import ru.belyaev.entity.User;
+import ru.belyaev.listener.SessionListener;
 import ru.belyaev.service.ProductService;
 import ru.belyaev.service.ShoppingCartService;
 import ru.belyaev.service.UserService;
@@ -31,6 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class ProductControllerTest extends AbstractTestNGSpringContextTests {
 
+    @Mock
+    private SessionListener sessionListener;
+
     @Autowired
     private WebApplicationContext wac;
 
@@ -44,6 +49,9 @@ public class ProductControllerTest extends AbstractTestNGSpringContextTests {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    User user;
 
     @InjectMocks
     private ProductController productController;
@@ -61,9 +69,7 @@ public class ProductControllerTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void shouldCallView() throws Exception {
-        when(productService.listAllProducts()).thenReturn(null);
-        when(shoppingCartService.getUserShoppingCart()).thenReturn(new ShoppingCart());
-        when(userService.getUser()).thenReturn(null);
+        when(shoppingCartService.getShoppingCartByUser(user)).thenReturn(new ShoppingCart());
         when(productService.showMaxHeight()).thenReturn(BigDecimal.valueOf(1));
         when(productService.showMinHeight()).thenReturn(BigDecimal.valueOf(1));
         when(productService.showMaxLength()).thenReturn(BigDecimal.valueOf(1));

@@ -3,8 +3,6 @@ package ru.belyaev.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.belyaev.entity.Product;
@@ -17,9 +15,8 @@ import ru.belyaev.repository.ShoppingCartRepository;
 import ru.belyaev.repository.UserRepository;
 import ru.belyaev.service.ShoppingCartService;
 
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Set;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -38,18 +35,16 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Autowired
     ProductRepository productRepository;
 
+
     @Override
-    public ShoppingCart getUserShoppingCart() {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        User user = getCurrentUser();
-        return shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
+    public ShoppingCart getShoppingCartByUser(User user) {
+        ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
+        return shoppingCart;
     }
 
     @Override
     @Transactional
-    public ShoppingCart addToShoppingCart(int productId, int count) {
-
-        User user = getCurrentUser();
+    public ShoppingCart addToShoppingCart(int productId, int count, User user) {
 
         Product productToCart = productRepository.findProductById(productId);
         LOGGER.info("--->>> Found product by ID");
@@ -84,16 +79,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCart.getShoppingCartItems().add(existProductInShoppingCart);
             LOGGER.info("--->>> Обновили товар в корзине");
         }
-        refreshTotalCount(shoppingCart);
-        refreshTotalCost(shoppingCart);
+        refreshShoppingCart(shoppingCart, user);
         shoppingCartRepository.save(shoppingCart);
         return shoppingCart;
     }
 
     @Override
     @Transactional
-    public ShoppingCart removeFromShoppingCart(int productId, int count) {
-        User user = getCurrentUser();
+    public ShoppingCart removeFromShoppingCart(int productId, int count, User user) {
         ShoppingCart shoppingCart = shoppingCartRepository.findShoppingCartByUser(user);
         Product product = productRepository.findProductById(productId);
         ShoppingCartItem existProductInShoppingCart = shoppingCartItemRepository.findShoppingCartItemByShoppingCartAndProduct(shoppingCart, product);
@@ -110,21 +103,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 LOGGER.info("--->>> Удалили весь продукт");
             }
         }
-        refreshTotalCount(shoppingCart);
-        refreshTotalCost(shoppingCart);
+        refreshShoppingCart(shoppingCart, user);
         shoppingCartRepository.saveAndFlush(shoppingCart);
         LOGGER.info("--->>> Сохранение - {} - {}", shoppingCart.getTotalCount(), shoppingCart.getTotalCost());
         return shoppingCart;
     }
 
-    @Override
-    public void removeShoppingCart(ShoppingCart shoppingCart, HttpSession session) {
-        shoppingCart = null;
-        session.removeAttribute("shoppingCart");
+
+    private void refreshShoppingCart(ShoppingCart shoppingCart, User user) {
+        refreshTotalCount(shoppingCart, user);
+        refreshTotalCost(shoppingCart, user);
     }
 
-    private void refreshTotalCount(ShoppingCart ThisShoppingCart){
-        User user = getCurrentUser();
+    private void refreshTotalCount(ShoppingCart ThisShoppingCart, User user){
         Set<ShoppingCartItem> list = shoppingCartRepository.findShoppingCartByUser(user).getShoppingCartItems();
         int totalCount = 0;
         for(ShoppingCartItem item: list) {
@@ -134,8 +125,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         LOGGER.info("Общее кол-во - {}", ThisShoppingCart.getTotalCount());
     }
 
-    private void refreshTotalCost(ShoppingCart ThisShoppingCart) {
-        User user = getCurrentUser();
+    private void refreshTotalCost(ShoppingCart ThisShoppingCart, User user) {
         Set<ShoppingCartItem> list = shoppingCartRepository.findShoppingCartByUser(user).getShoppingCartItems();
         BigDecimal totalCost = BigDecimal.valueOf(0.00);
         for(ShoppingCartItem item: list) {
@@ -143,12 +133,5 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
         ThisShoppingCart.setTotalCost(totalCost);
         LOGGER.info("Общая стоимость - {}", ThisShoppingCart.getTotalCost());
-    }
-
-    private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        User user = userRepository.findUserByName(name);
-        return user;
     }
 }

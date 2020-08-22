@@ -23,11 +23,11 @@ public class Order implements Serializable {
     @Column
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "order")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "order")
     private Set<OrderItem> orderItemsList;
 
     @Column
@@ -36,6 +36,9 @@ public class Order implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_address")
     private Address address;
+
+    @Column(name = "execution_status")
+    private String executionStatus;
 
     public Order() {
     }
@@ -72,6 +75,13 @@ public class Order implements Serializable {
         this.address = address;
     }
 
+    public String getExecutionStatus() {
+        return executionStatus;
+    }
+
+    public void setExecutionStatus(String executionStatus) {
+        this.executionStatus = executionStatus;
+    }
 
     public Timestamp getCreated() {
         return created;

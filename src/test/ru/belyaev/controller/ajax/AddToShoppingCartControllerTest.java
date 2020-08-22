@@ -18,6 +18,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import ru.belyaev.config.ApplicationConfig;
 import ru.belyaev.entity.ShoppingCart;
+import ru.belyaev.entity.User;
 import ru.belyaev.service.impl.ShoppingCartServiceImpl;
 
 import java.math.BigDecimal;
@@ -40,6 +41,9 @@ public class AddToShoppingCartControllerTest extends AbstractTestNGSpringContext
     private MockMvc mockMvc;
 
     @Mock
+    private User user;
+
+    @Mock
     private ShoppingCartServiceImpl shoppingCartService;
 
     @InjectMocks
@@ -59,7 +63,7 @@ public class AddToShoppingCartControllerTest extends AbstractTestNGSpringContext
     @Test
     @Parameters({"productId", "count"})
     public void shouldReturnJsonObject(int productId, int count) throws Exception {
-        when(shoppingCartService.addToShoppingCart(productId, count)).thenReturn(new ShoppingCart(1, BigDecimal.valueOf(1)));
+        when(shoppingCartService.addToShoppingCart(productId, count, user)).thenReturn(new ShoppingCart(1, BigDecimal.valueOf(1)));
         MvcResult result = this.mockMvc.perform(get("/addToShoppingCart")
                     .param("productId", String.valueOf(productId))
                     .param("count", String.valueOf(count))

@@ -7,10 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import ru.belyaev.entity.Product;
 import ru.belyaev.model.JsonCart;
 import ru.belyaev.service.ProductService;
+import ru.belyaev.constant.SessionConstant;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -36,8 +36,8 @@ public class SearchController {
         int count = productService.countProductBySearchFilter(minLen, maxLen, minWidth, maxWidth, minHeight,
                 maxHeight,minPrice, maxPrice);
 
-        req.setAttribute("productList", list);
-        req.setAttribute("countProduct", count);
+        req.setAttribute(SessionConstant.PRODUCT_LIST.toString(), list);
+        req.setAttribute(SessionConstant.COUNT_PRODUCT_BY_SEARCH_FORM.toString(), count);
         return "fragments/product-list";
     }
 
@@ -51,7 +51,7 @@ public class SearchController {
 
         int count = productService.countProductBySearchFilter(minLen, maxLen, minWidth, maxWidth, minHeight,
                 maxHeight,minPrice, maxPrice);
-        req.setAttribute("countProduct", count);
+        req.setAttribute(SessionConstant.COUNT_PRODUCT_BY_SEARCH_FORM.toString(), count);
         LOGGER.info("-->>> Вызван контроллер мгновенной фильтрации - {}", count);
         JsonCart jsonCart = new JsonCart();
         jsonCart.setTotalCount(count);

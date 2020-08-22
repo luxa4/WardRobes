@@ -13,6 +13,10 @@ import java.util.List;
 
 public interface ProductService {
 
+    List<Product> findProductForSearchTextForm(String fragment);
+
+    long countProductForSearchTextForm(String fragment);
+
     Long countAllProduct();
 
     List<Product> listAllProducts();
@@ -20,12 +24,19 @@ public interface ProductService {
     Product showProductPageByProductId(int id);
 
     BigDecimal showMaxHeight();
+
     BigDecimal showMinHeight();
+
     BigDecimal showMaxWidth();
+
     BigDecimal showMinWidth();
+
     BigDecimal showMaxLength();
+
     BigDecimal showMinLength();
+
     BigDecimal showMaxPrice();
+
     BigDecimal showMinPrice();
 
     List<Product> productBySearchFilter(BigDecimal minLen, BigDecimal maxLen, BigDecimal minWidth, BigDecimal maxWidth,

@@ -87,4 +87,8 @@ public class ShoppingCart implements Serializable {
     public void setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
     }
+
+    public Boolean shoppingCartIsEmpty() {
+        return shoppingCartItems.isEmpty() ? true : false;
+    }
 }

@@ -31,6 +31,9 @@ public class Address implements Serializable {
     @Column
     private Integer flat;
 
+    @Column
+    private String recipient;
+
     public Address() {
     }
 
@@ -88,6 +91,14 @@ public class Address implements Serializable {
 
     public void setFlat(Integer flat) {
         this.flat = flat;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
     @Override

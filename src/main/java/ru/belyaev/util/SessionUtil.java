@@ -1,17 +1,16 @@
 package ru.belyaev.util;
 
+import ru.belyaev.constant.SessionConstant;
 import ru.belyaev.entity.ShoppingCart;
 import ru.belyaev.entity.User;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class SessionUtil {
 
     public static ShoppingCart getShoppingCart(HttpSession session) {
-        ShoppingCart currentShoppingCart = (ShoppingCart) session.getAttribute("currentShoppingCart");
+        ShoppingCart currentShoppingCart = (ShoppingCart) session.getAttribute(SessionConstant.SHOPPING_CART.toString());
 
         if (currentShoppingCart == null) {
             currentShoppingCart = new ShoppingCart();
@@ -21,21 +20,20 @@ public class SessionUtil {
         return currentShoppingCart;
     }
 
-    public static boolean createdShoppingCart(HttpSession session) {
-        return session.getAttribute("currentShoppingCart") == null ? false : true;
+    public static void setCurrentShoppingCart(HttpSession session, ShoppingCart shoppingCart) {
+        session.setAttribute(SessionConstant.SHOPPING_CART.toString(), shoppingCart);
     }
 
-    public static void setShoppingCart(HttpSession session, ShoppingCart shoppingCart) {
-        session.setAttribute("currentShoppingCart", shoppingCart);
+    public static void clearCurrentShoppingCart(HttpSession session) {
+        session.removeAttribute(SessionConstant.SHOPPING_CART.toString());
+    }
+
+    public static void setCurrentUser(HttpSession httpSession, User user) {
+        httpSession.setAttribute(SessionConstant.USER.toString(), user);
     }
 
     public static User getCurrentUser(HttpSession session) {
-        User currentUser = (User) session.getAttribute("current_user");
-        return currentUser == null ? null : currentUser;
-    }
-
-    public static void setCurrentUser(HttpSession session, User user) {
-        session.setAttribute("current_user", user);
+        return (User) session.getAttribute(SessionConstant.USER.toString());
     }
 
 }

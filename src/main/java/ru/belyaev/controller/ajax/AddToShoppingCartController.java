@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.belyaev.entity.ShoppingCart;
+import ru.belyaev.entity.User;
 import ru.belyaev.model.JsonCart;
 import ru.belyaev.service.ShoppingCartService;
-import ru.belyaev.util.SessionConstant;
+import ru.belyaev.util.SessionUtil;
 
 import javax.servlet.http.HttpSession;
 
@@ -30,8 +31,9 @@ public class AddToShoppingCartController {
 
     @GetMapping("/addToShoppingCart")
     public JsonCart addToShoppingCart(@RequestParam("productId") int productId, @RequestParam("count") int count, HttpSession session)  {
-        ShoppingCart shoppingCart = shoppingCartService.addToShoppingCart(productId, count);
-        session.setAttribute(SessionConstant.SHOPPING_CART.toString(), shoppingCart);
+        User user = SessionUtil.getCurrentUser(session);
+        ShoppingCart shoppingCart = shoppingCartService.addToShoppingCart(productId, count, user);
+        SessionUtil.setCurrentShoppingCart(session, shoppingCart);
         JsonCart jsonCart = new JsonCart(shoppingCart.getTotalCount(), shoppingCart.getTotalCost());
         return jsonCart;
     }

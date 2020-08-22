@@ -18,7 +18,6 @@ import org.springframework.webflow.mvc.servlet.FlowHandlerMapping;
 @Configuration
 public class WebFlowConfig extends AbstractFlowConfiguration {
 
-
     @Bean
     public FlowExecutor flowExecutor() {
         return getFlowExecutorBuilder(flowRegistry()).build();
@@ -46,6 +45,4 @@ public class WebFlowConfig extends AbstractFlowConfiguration {
         handlerAdapter.setSaveOutputToFlashScopeOnRedirect(true);
         return handlerAdapter;
     }
-
-
 }

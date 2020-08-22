@@ -249,8 +249,13 @@
                 count: count
             },
             success: function(shoppingCart) {
-                $('#shoppingCart .total-count').text(shoppingCart.totalCount);
-                $('#'+productId).remove();
+                if (shoppingCart.totalCount == 0) {
+                    window.location.href = '/';
+                } else {
+                    $('#shoppingCart .total-count').text(shoppingCart.totalCount);
+                    $('#tableTotalCost').text(shoppingCart.totalCost);
+                    $('#' + productId).remove();
+                }
             },
         });
     };

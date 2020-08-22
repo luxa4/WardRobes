@@ -1,9 +1,8 @@
-
 <%--
   Created by IntelliJ IDEA.
-  User: Саша
-  Date: 25.06.2020
-  Time: 15:13
+  User: luxa4
+  Date: 20.08.2020
+  Time: 9:39
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" isELIgnored="false" %>
@@ -11,9 +10,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title>Order Detail</title>
-    <link href="<c:url value="/static/css/bootstrap.css" />" rel="stylesheet" type="text/css" />
-    <link href="<c:url value="/static/css/bootstrap-grid.css" />" rel="stylesheet" type="text/css" />
+    <title>Shop of Wardrobes </title>
+    <link href="<c:url value="/static/css/bootstrap.css" />" rel="stylesheet"  type="text/css" />
+    <link href="<c:url value="/static/css/bootstrap-grid.css" />" rel="stylesheet"  type="text/css" />
     <link href="<c:url value="/static/css/myapp.css" />" rel="stylesheet" type="text/css" />
     <link href="<c:url value="/static/css/all.css" />" rel="stylesheet" type="text/css" />
     <link href="<c:url value="/static/css/jquery-ui.css" />" rel="stylesheet" type="text/css" />
@@ -22,15 +21,16 @@
 </head>
 <body>
 
-<%@include file="/WEB-INF/views/fragments/header.jsp" %>
+<%@include file="fragments/header.jsp" %>
 <div class="container-fluid mt-4">
     <div class="row">
-        <%@include file="/WEB-INF/views/fragments/searchfilter.jsp" %>
+        <%@include file="fragments/searchfilter.jsp" %>
+
         <main class="col-12 col-sm-6 col-md-6 col-lg-10 col-xl-10">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="d-flex w-100 flex-row justify-content-center">
-                        <h4>Your order</h4>
+                <div id="content" class="row">
+                    <div>
+                       <h4>Order № ${order.id}</h4>
                     </div>
                     <table class="table">
                         <thead class="thead-light">
@@ -43,8 +43,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="item" items="${shopping_cart.shoppingCartItems}">
-                            <tr>
+                        <c:forEach var="item" items="${order.orderItemsList}">
+                            <tr id="${item.product.id}">
                                 <td><img src="${item.product.imageUrl}" style="width: 100px" /></td>
                                 <td>${item.product.name}</td>
                                 <td>${item.count}</td>
@@ -54,16 +54,12 @@
                         </c:forEach>
                         </tbody>
                     </table>
-                    <div class="d-flex w-100 flex-row justify-content-center">
-                        <a href="${flowExecutionUrl}&_eventId=cancel" class="btn btn-primary">Cancel</a>
-                        <a href="${flowExecutionUrl}&_eventId=next" class="btn btn-primary">Next</a>
-                    </div>
                 </div>
             </div>
         </main>
     </div>
 </div>
-<%@include file="/WEB-INF/views/fragments/footer.jsp" %>
+<%@include file="fragments/footer.jsp" %>
 <script src="<c:url value="/static/js/jquery.js"/>" ></script>
 <script src="<c:url value="/static/js/bootstrap.js"/>" ></script>
 <script src="<c:url value="/static/js/application.js"/>" ></script>

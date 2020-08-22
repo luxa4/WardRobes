@@ -29,6 +29,9 @@ public class OrderServiceImplTest extends AbstractTestNGSpringContextTests {
     private ShoppingCartRepository shoppingCartRepository;
 
     @Mock
+    private Address address;
+
+    @Mock
     private OrderRepository orderRepository;
 
     @BeforeMethod
@@ -39,15 +42,14 @@ public class OrderServiceImplTest extends AbstractTestNGSpringContextTests {
     @Test(expectedExceptions = InternalServerErrorException.class)
     public void shouldThrowExceptionWhenShoppingCartIsNull() {
         User user = new User();
-        Order order = new Order();
+        ShoppingCart shoppingCart = new ShoppingCart();
         when(shoppingCartRepository.findShoppingCartByUser(user)).thenReturn(null);
-        orderService.makeOrder(order, user);
+        orderService.makeOrder(shoppingCart, user, address);
     }
 
     @Test
     public void testMakeOrder() {
         User user = new User();
-        Order order = new Order();
         ShoppingCart shoppingCart = new ShoppingCart();
         ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
         shoppingCartItem.setProduct(new Product());
@@ -56,10 +58,8 @@ public class OrderServiceImplTest extends AbstractTestNGSpringContextTests {
         HashSet<ShoppingCartItem> list = new HashSet();
         list.add(shoppingCartItem);
         shoppingCart.setShoppingCartItems(list);
-        when(shoppingCartRepository.findShoppingCartByUser(user)).thenReturn(shoppingCart);
-        orderService.makeOrder(order, user);
-        verify(shoppingCartRepository, times(1)).findShoppingCartByUser(user);
-        verify(orderRepository, times(1)).save(order);
+        orderService.makeOrder(shoppingCart, user, address);
+        verify(orderRepository, times(1)).save(any(Order.class));
         verify(shoppingCartRepository, times(1)).delete(shoppingCart);
     }
 }

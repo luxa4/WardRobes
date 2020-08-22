@@ -68,17 +68,12 @@ public class ShoppingCartServiceImplTest {
         when(userRepository.findUserByName("sasha")).thenReturn(user);
     }
 
-    @Test
-    public void testGetUserShoppingCart() {
-        shoppingCartService.getUserShoppingCart();
-        verify(shoppingCartRepository, times(1)).findShoppingCartByUser(any(User.class));
-    }
 
     @Test
     public void testAddToShoppingCart() {
         when(productRepository.findProductById(1)).thenReturn(product);
         when(shoppingCartRepository.findShoppingCartByUser(user)).thenReturn(shoppingCart);
-        shoppingCart = shoppingCartService.addToShoppingCart(1,1);
+        shoppingCart = shoppingCartService.addToShoppingCart(1,1, user);
         assertThat(shoppingCart).isNotNull();
         verify(productRepository, times(1)).findProductById(any(Integer.class));
         verify(shoppingCartRepository, times(3)).findShoppingCartByUser(any(User.class));
@@ -89,7 +84,7 @@ public class ShoppingCartServiceImplTest {
     public void testRemoveFromShoppingCart() {
         when(productRepository.findProductById(1)).thenReturn(product);
         when(shoppingCartRepository.findShoppingCartByUser(user)).thenReturn(shoppingCart);
-        shoppingCart = shoppingCartService.removeFromShoppingCart(1,1);
+        shoppingCart = shoppingCartService.removeFromShoppingCart(1,1, user);
         assertThat(shoppingCart).isNotNull();
         verify(productRepository, times(1)).findProductById(any(Integer.class));
         verify(shoppingCartRepository, times(3)).findShoppingCartByUser(any(User.class));

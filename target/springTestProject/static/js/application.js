@@ -249,14 +249,18 @@
                 count: count
             },
             success: function(shoppingCart) {
-                $('#shoppingCart .total-count').text(shoppingCart.totalCount);
-                $('#'+productId).remove();
+                if (shoppingCart.totalCount == 0) {
+                    window.location.href = '/';
+                } else {
+                    $('#shoppingCart .total-count').text(shoppingCart.totalCount);
+                    $('#tableTotalCost').text(shoppingCart.totalCost);
+                    $('#' + productId).remove();
+                }
             },
         });
     };
 
     var showResult = function() {
-
         var minLen  = $('#polzunok-length-min').attr('data-value');
         var maxLen  = $('#polzunok-length-max').attr('data-value');
         var minWidth  = $('#polzunok-width-min').attr('data-value');

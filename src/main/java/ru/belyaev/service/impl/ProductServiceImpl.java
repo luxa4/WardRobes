@@ -94,4 +94,15 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.searchFiltersCount(minLen, maxLen, minWidth, maxWidth, minHeight, maxHeight,
                 minPrice, maxPrice);
     }
+
+    @Override
+    public List<Product> findProductForSearchTextForm(String fragment) {
+        List<Product> products = productRepository.findProductsByNameContainingIgnoreCase(fragment);
+        return products;
+    }
+
+    @Override
+    public long countProductForSearchTextForm(String fragment) {
+        return productRepository.countProductByNameContainingIgnoreCase(fragment);
+    }
 }

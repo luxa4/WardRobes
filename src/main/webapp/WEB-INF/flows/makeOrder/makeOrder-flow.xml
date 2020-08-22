@@ -4,38 +4,38 @@
       xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
     <var name="user" class="ru.belyaev.entity.User"/>
-    <var name="order" class="ru.belyaev.entity.Order"/>
     <var name="address" class="ru.belyaev.entity.Address"/>
-
+    <var name="shoppingCart" class="ru.belyaev.entity.ShoppingCart"/>
+    <var name="order" class="ru.belyaev.entity.Order"/>
 
     <on-start>
         <evaluate expression="userServiceImpl.getUser()" result="user" />
-        <evaluate expression="order.address=address" />
+        <evaluate expression="shoppingCartRepository.findShoppingCartByUser(user)" result="shoppingCart"/>
     </on-start>
 
-    <view-state id="orderDetails" >
+    <view-state id="productsForOrder" >
         <transition on="next" to="collectShippingAddress" />
     </view-state>
 
-    <view-state id="collectShippingAddress" model="order" >
-        <transition on="back" to="orderDetails" />
+    <view-state id="collectShippingAddress" model="address" >
+        <transition on="back" to="productsForOrder" />
         <transition on="next" to="orderInfo" />
     </view-state>
 
-    <view-state id="orderInfo" >
+    <view-state id="orderInfo" model="{user, shoppingCart, address}">
         <transition on="back" to="collectShippingAddress" />
         <transition on="makeOrder" to="makeOrder" />
     </view-state>
 
     <action-state id="makeOrder" >
-        <evaluate expression="orderServiceImpl.makeOrder(order, user)" result="order" />
+        <evaluate expression="orderServiceImpl.makeOrder(shoppingCart, user, address)" result="order" />
         <transition on-exception="ru.belyaev.exception.InternalServerErrorException" to="exception"/>
         <transition to="thanks" />
     </action-state>
 
     <view-state id="exception" />
 
-    <end-state id="thanks" view="thanks.jsp"/>
+    <end-state id="thanks"  view="thanks.jsp"/>
 
     <end-state id="cancel" view="cancelPage.jsp" />
 

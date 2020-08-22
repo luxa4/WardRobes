@@ -11,7 +11,15 @@ import ru.belyaev.entity.Order;
 import ru.belyaev.entity.ShoppingCart;
 import ru.belyaev.entity.User;
 
+import java.util.List;
+
 public interface OrderService {
 
-    Order makeOrder(Order order, User user);
+    List<Order> findUserOrders(User user);
+
+    long findCountUserOrders(User user);
+
+    Order findOrderById(long id);
+
+    Order makeOrder(ShoppingCart shoppingCart, User user, Address address);
 }

@@ -25,7 +25,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserService userService;
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
@@ -44,12 +43,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return auth;
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/registration").permitAll()
-//                .anyRequest().authenticated()
+                .antMatchers("/user").hasRole("USER")
+                .antMatchers("/orders*").hasRole("USER")
+                .antMatchers("/shoppingCart").hasRole("USER")
+                .and()
+                    .exceptionHandling().accessDeniedPage("/access-denied")
                 .and()
                     .formLogin()
                     .loginPage("/login")

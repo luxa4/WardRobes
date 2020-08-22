@@ -1,3 +1,4 @@
+
 <%--
   Created by IntelliJ IDEA.
   User: luxa4
@@ -19,36 +20,41 @@
 <body>
 <div class="container-fluid">
     <div class="d-flex flex-column h-100 justify-content-center align-items-center">
-        <div><h3>Shipping Address</h3></div>
+        <div><h3>Shipping details</h3></div>
         <div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3">
             <div class="card x">
                 <div class="card-body">
-                    <spring:form modelAttribute="order">
+                    <spring:form modelAttribute="address">
                         <input type="hidden" name="_flowExecutionKey" value="${flowExecutionKey}">
                         <div class="form-group">
+                            <label>Recipient</label>
+                            <spring:input path="recipient"  type="text" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
                             <label>Index</label>
-                            <spring:input path="address.index"  type="text" class="form-control" />
+                            <spring:input path="index"  type="text" class="form-control" />
                         </div>
 
                         <div class="form-group">
                             <label>Region</label>
-                            <spring:input path="address.region" type="text" class="form-control" />
+                            <spring:input path="region" type="text" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>City</label>
-                            <spring:input path="address.city" type="text" class="form-control" />
+                            <spring:input path="city" type="text" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>Street</label>
-                            <spring:input path="address.street" type="text" class="form-control" />
+                            <spring:input path="street" type="text" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>House</label>
-                            <spring:input path="address.homeNumber" type="text" class="form-control" />
+                            <spring:input path="homeNumber" type="text" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>Flat</label>
-                            <spring:input path="address.flat" type="text" class="form-control" />
+                            <spring:input path="flat" type="text" class="form-control" />
                         </div>
                         <a href="${flowExecutionUrl}&_eventId=cancel" class="btn btn-primary">Cancel</a>
                         <a href="${flowExecutionUrl}&_eventId=back" class="btn btn-primary">Back</a>

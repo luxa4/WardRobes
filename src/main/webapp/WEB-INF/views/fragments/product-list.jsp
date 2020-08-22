@@ -1,9 +1,9 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<c:if test="${countProduct != null}" >
+<c:if test="${countProductBySearchForm != null}" >
     <div class="alert alert-dark container-fluid" role="alert">
-        Found : ${countProduct} products.
+        Found : ${countProductBySearchForm} products.
     </div>
 </c:if>
 

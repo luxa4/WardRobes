@@ -15,6 +15,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.belyaev.config.ApplicationConfig;
 import ru.belyaev.entity.ShoppingCart;
+import ru.belyaev.entity.User;
 import ru.belyaev.service.ShoppingCartService;
 
 import static org.mockito.Mockito.*;
@@ -31,6 +32,9 @@ public class ShoppingCartControllerTest extends AbstractTestNGSpringContextTests
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
+
+    @Mock
+    private User user;
 
     @Mock
     private ShoppingCartService shoppingCartService;
@@ -51,18 +55,10 @@ public class ShoppingCartControllerTest extends AbstractTestNGSpringContextTests
 
     @Test
     public void shouldReturnViewShoppingCart() throws Exception {
-        when(shoppingCartService.getUserShoppingCart()).thenReturn(new ShoppingCart());
+        when(shoppingCartService.getShoppingCartByUser(user)).thenReturn(new ShoppingCart());
         this.mockMvc.perform(get("/shoppingCart"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("shoppingCartPage"));
     }
-
-    @Test
-    public void shouldInvokeMethodFindShoppingCart() throws Exception {
-        when(shoppingCartService.getUserShoppingCart()).thenReturn(new ShoppingCart());
-        this.mockMvc.perform(get("/shoppingCart"));
-        verify(shoppingCartService, times(1)).getUserShoppingCart();
-    }
-
 }

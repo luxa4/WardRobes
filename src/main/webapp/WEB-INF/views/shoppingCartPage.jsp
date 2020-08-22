@@ -41,7 +41,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="item" items="${shopping_cart.shoppingCartItems}">
+                            <c:forEach var="item" items="${shoppingCart.shoppingCartItems}">
                             <tr id="${item.product.id}">
                                 <td><img src="${item.product.imageUrl}" style="width: 100px" /></td>
                                 <td>${item.product.name}</td>
@@ -52,6 +52,11 @@
                                 </td>
                             </tr>
                             </c:forEach>
+                            <tr>
+                            <td colspan="4"><br/></td>
+                            <td><b>Total cost: <span id="tableTotalCost"> ${shoppingCart.totalCost}</span></b></td>
+                            <td></td>
+                            </tr>
                             </tbody>
                         </table>
                     <div class="d-flex w-100 flex-row justify-content-center">

@@ -20,18 +20,26 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findAll();
 
-    Product findProductByNameContains(String fragmentName);
-
     Product findProductById(int id);
 
-    // For filters
+    List<Product> findProductsByNameContainingIgnoreCase(String fragment);
+
+    long countProductByNameContainingIgnoreCase(String fragment);
+
     BigDecimal findMaxHeight();
+
     BigDecimal findMinHeight();
+
     BigDecimal findMaxLength();
+
     BigDecimal findMinLength();
+
     BigDecimal findMaxWidth();
+
     BigDecimal findMinWidth();
+
     BigDecimal findMaxPrice();
+
     BigDecimal findMinPrice();
 
     List<Product> searchFilters(BigDecimal minLen, BigDecimal maxLen, BigDecimal minWidth, BigDecimal maxWidth,
