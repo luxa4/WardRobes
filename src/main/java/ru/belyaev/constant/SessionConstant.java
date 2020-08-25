@@ -17,7 +17,8 @@ public enum SessionConstant {
     MIN_HEI("heiMin"),
     MAX_HEI("heiMax"),
     MIN_PRICE("priceMin"),
-    MAX_PRICE("priceMax");
+    MAX_PRICE("priceMax"),
+    ERROR_MESSAGE("error_msg");
 
     private String title;
 

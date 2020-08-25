@@ -8,9 +8,11 @@
 package ru.belyaev.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -31,13 +33,29 @@ import java.util.Properties;
 @ComponentScan(basePackages = "ru.belyaev")
 @EnableWebMvc
 @EnableTransactionManagement
+@PropertySource("classpath:application.properties")
 @EnableJpaRepositories(basePackages = "ru.belyaev.repository")
 public class ApplicationConfig implements WebMvcConfigurer {
+
+    @Value("${userDb}")
+    private String userDb;
+
+    @Value("${driverClassDb}")
+    private String driverClassDb;
+
+    @Value("${urlDb}")
+    private String urlDb;
+
+    @Value("${passwordDb}")
+    private String passwordDb;
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
     }
+
+
 
     @Bean
     InternalResourceViewResolver viewResolver () {
@@ -51,13 +69,13 @@ public class ApplicationConfig implements WebMvcConfigurer {
     public DataSource dataSource ()  {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         try {
-            dataSource.setDriverClass("org.h2.Driver");
+            dataSource.setDriverClass(driverClassDb);
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }
-        dataSource.setJdbcUrl("jdbc:h2:~/test");
-        dataSource.setUser("sa");
-        dataSource.setPassword("");
+        dataSource.setJdbcUrl(urlDb);
+        dataSource.setUser(userDb);
+        dataSource.setPassword(passwordDb);
         dataSource.setInitialPoolSize(5);
         dataSource.setMinPoolSize(5);
         dataSource.setMaxPoolSize(20);

@@ -17,7 +17,9 @@
                     <a href="/login" class="nav_link">LogIn</a>
                 </c:when>
                 <c:otherwise>
-                    <a href="/orders" class="nav_link">My orders</a>
+                    <c:if test="${orderList != null}" >
+                        <a href="/orders" class="nav_link">My orders</a>
+                    </c:if>
                     <spring:form action="/logout" method="post" class="userlogout">
                         <button type="submit" class="nav_link btn-link ">LogOut</button>
                     </spring:form>

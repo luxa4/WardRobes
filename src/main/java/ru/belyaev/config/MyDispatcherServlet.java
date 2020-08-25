@@ -27,4 +27,6 @@ public class MyDispatcherServlet extends AbstractAnnotationConfigDispatcherServl
     protected String[] getServletMappings() {
         return new String[] {"/"};
     }
+
+
 }

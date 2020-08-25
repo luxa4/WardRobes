@@ -8,14 +8,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.belyaev.config.ApplicationConfig;
-import ru.belyaev.listener.SessionListener;
 import ru.belyaev.service.UserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@WebAppConfiguration()
+@WebAppConfiguration
 @ContextConfiguration(classes = {ApplicationConfig.class})
 public class AuthenticationControllerTest extends AbstractTestNGSpringContextTests {
 
@@ -32,9 +29,6 @@ public class AuthenticationControllerTest extends AbstractTestNGSpringContextTes
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
-
-    @Mock
-    private SessionListener sessionListener;
 
     @Mock
     private UserService userService;

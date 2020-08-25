@@ -1,14 +1,29 @@
 --
 -- H2 database dump
-
 DROP TABLE IF EXISTS order_item;
 DROP TABLE IF EXISTS "order";
-DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS shopping_cart_item;
+DROP TABLE IF EXISTS shopping_cart;
 DROP TABLE IF EXISTS user_role;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS shopping_cart;
-DROP TABLE IF EXISTS shopping_cart_item;
+
+
+-- Таблица address
+CREATE TABLE address
+(
+  id  bigserial NOT NULL,
+  index character varying(60),
+  region character varying(60),
+  city character varying(60),
+  street character varying(60),
+  home_number character varying(60),
+  flat integer NOT NULL,
+  recipient character varying(60) NOT NULL,
+  CONSTRAINT address_pkey PRIMARY KEY (id)
+);
 
 
 -- Таблица аккаунтов
@@ -30,9 +45,6 @@ CREATE TABLE role
   CONSTRAINT role_pk PRIMARY KEY (id)
 );
 
--- Добавим роли
-INSERT INTO role ("id", "role") VALUES (DEFAULT, 'ROLE_USER');
-INSERT INTO role ("id", "role") VALUES (DEFAULT, 'ROLE_ADMIN');
 
 -- Таблица прав доступа и соотвутствующих им акк
 CREATE TABLE user_role
@@ -40,18 +52,14 @@ CREATE TABLE user_role
   id_user integer NOT NULL,
   id_role integer NOT NULL,
   CONSTRAINT user_role_pk PRIMARY KEY (id_user, id_role),
-  CONSTRAINT user_role_user_id_fk FOREIGN KEY (id_user)
-      REFERENCES user (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT user_role_role_id_fk FOREIGN KEY (id_role)
-      REFERENCES role (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT user_role_user_id_fk FOREIGN KEY (id_user) REFERENCES user (id),
+  CONSTRAINT user_role_role_id_fk FOREIGN KEY (id_role) REFERENCES role (id)
 );
 
 -- Таблица продуктов магазина
 CREATE TABLE product
 (
-  id integer NOT NULL,
+  id bigserial NOT NULL,
   name character varying(255) NOT NULL,
   length numeric(8,2) NOT NULL,
   width numeric(8,2) NOT NULL,
@@ -60,7 +68,7 @@ CREATE TABLE product
   status character varying(255) NOT NULL,
   image_url character varying(255) NOT NULL,
   totalCount integer NOT NULL, 
-  CONSTRAINT product_pkey PRIMARY KEY (id),
+  CONSTRAINT product_pkey PRIMARY KEY (id)
 );
 
 
@@ -69,11 +77,12 @@ CREATE TABLE shopping_cart
 (
   id bigserial NOT NULL,
   id_user integer NOT NULL,
-  created timestamp without time zone NOT NULL,
+  total_count integer NOT NULL,
+  total_cost numeric(8,2) NOT NULL, 
   CONSTRAINT shopping_cart_pk PRIMARY KEY (id),
   CONSTRAINT shopping_cart_user_id_fk FOREIGN KEY (id_user)
-      REFERENCES user (id) MATCH SIMPLE
-      ON UPDATE CASCADE ON DELETE CASCADE
+      REFERENCES user (id)
+     
 );
 
 -- Таблица товаров в корзине
@@ -83,13 +92,11 @@ CREATE TABLE shopping_cart_item
   id_shopping_cart bigint NOT NULL,
   id_product integer NOT NULL,
   count integer,
-  CONSTRAINT order_item_pk PRIMARY KEY (id),
+  CONSTRAINT shopping_cart_item_pk PRIMARY KEY (id),
   CONSTRAINT shopping_cart_item_id_fk FOREIGN KEY (id_shopping_cart)
-      REFERENCES shopping_cart (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
+      REFERENCES shopping_cart (id),
   CONSTRAINT shopping_cart_item_product_id_fk FOREIGN KEY (id_product)
-      REFERENCES product (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+      REFERENCES product (id)
 );
 
 
@@ -97,12 +104,15 @@ CREATE TABLE shopping_cart_item
 CREATE TABLE "order"
 (
   id bigserial NOT NULL,
-  id_account integer NOT NULL,
+  id_user integer NOT NULL,
   created timestamp without time zone NOT NULL,
+  execution_status character varying(60),
+  id_address integer NOT NULL,
   CONSTRAINT order_pk PRIMARY KEY (id),
   CONSTRAINT order_user_id_fk FOREIGN KEY (id_user)
-      REFERENCES user (id) MATCH SIMPLE
-      ON UPDATE CASCADE ON DELETE CASCADE
+      REFERENCES user (id),
+  CONSTRAINT order_address_id_fk FOREIGN KEY (id_address)
+      REFERENCES address (id)    
 );
 
 -- Таблица товаров в заказе
@@ -114,12 +124,16 @@ CREATE TABLE order_item
   count integer,
   CONSTRAINT order_item_pk PRIMARY KEY (id),
   CONSTRAINT order_item_order_id_fk FOREIGN KEY (id_order)
-      REFERENCES "order" (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
+      REFERENCES "order" (id),
   CONSTRAINT order_item_product_id_fk FOREIGN KEY (id_product)
-      REFERENCES product (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+      REFERENCES product (id)
 );
+
+-- Добавим роли
+INSERT INTO role (id, role) VALUES (DEFAULT, 'ROLE_USER');
+INSERT INTO role (id, role) VALUES (DEFAULT, 'ROLE_ADMIN');
+
+-- Добавим продукты в магазин
 
  INSERT INTO PUBLIC.PRODUCT (ID, NAME, LENGTH, WIDTH, HEIGHT, PRICE, STATUS, IMAGE_URL, TOTALCOUNT)
   VALUES (null, 'Songesand', 119.60, 60.00, 191.00, 189.00, 'in stock', '/static/img/0555114_PE660180_S4_SONGESAND.jpg', 12);

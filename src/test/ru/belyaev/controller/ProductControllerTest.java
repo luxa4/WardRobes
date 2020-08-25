@@ -1,6 +1,6 @@
 package ru.belyaev.controller;
 
-import org.junit.Assert;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -16,13 +16,14 @@ import org.testng.annotations.Test;
 import ru.belyaev.config.ApplicationConfig;
 import ru.belyaev.entity.ShoppingCart;
 import ru.belyaev.entity.User;
-import ru.belyaev.listener.SessionListener;
 import ru.belyaev.service.ProductService;
 import ru.belyaev.service.ShoppingCartService;
 import ru.belyaev.service.UserService;
 
+import javax.servlet.ServletContext;
 import java.math.BigDecimal;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,13 +34,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class ProductControllerTest extends AbstractTestNGSpringContextTests {
 
-    @Mock
-    private SessionListener sessionListener;
 
     @Autowired
     private WebApplicationContext wac;
 
     private MockMvc mockMvc;
+
+    @Mock
+    private ServletContext servletContext;
 
     @Mock
     private ProductService productService;
@@ -64,7 +66,7 @@ public class ProductControllerTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void controllerIsCreated() {
-        Assert.assertNotNull(wac.getBean("productController"));
+        assertThat(wac.getBean("productController")).isNotNull();
     }
 
     @Test

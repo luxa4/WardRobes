@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <spring:input path="password" class="form-control"/>
+                            <spring:input path="password" type="password" class="form-control"/>
                         </div>
                         <div class="container-fluid" >
                             <div class="row align-items-center justify-content-center" >
