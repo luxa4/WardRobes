@@ -22,4 +22,6 @@ public interface OrderService {
     Order findOrderById(long id);
 
     Order makeOrder(ShoppingCart shoppingCart, User user, Address address);
+
+    boolean existOrdersByUser(User user);
 }

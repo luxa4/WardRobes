@@ -9,9 +9,7 @@ package ru.belyaev.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Set;
 
 @Entity

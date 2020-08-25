@@ -1,11 +1,13 @@
 package ru.belyaev.util;
 
 import ru.belyaev.constant.SessionConstant;
+import ru.belyaev.entity.Order;
 import ru.belyaev.entity.ShoppingCart;
 import ru.belyaev.entity.User;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
+import java.util.List;
 
 public class SessionUtil {
 
@@ -34,6 +36,10 @@ public class SessionUtil {
 
     public static User getCurrentUser(HttpSession session) {
         return (User) session.getAttribute(SessionConstant.USER.toString());
+    }
+
+    public static void setListOrder(HttpSession httpSession, List<Order> orderList) {
+        httpSession.setAttribute(SessionConstant.ORDER_LIST.toString(), orderList);
     }
 
 }

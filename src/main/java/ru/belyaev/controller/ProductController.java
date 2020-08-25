@@ -54,9 +54,15 @@ public class ProductController {
     @GetMapping("/")
     public String showAllProduct(Model model, HttpSession session) {
         User user = userService.getUser();
+        boolean existOrders = orderService.existOrdersByUser(user);
+        if (existOrders) {
+            List<Order> orderList = orderService.findUserOrders(user);
+            SessionUtil.setListOrder(session, orderList);
+        } else {
+            SessionUtil.setListOrder(session, null);
+        }
         List<Product> productList = productService.listAllProducts();
         ShoppingCart shoppingCart = shoppingCartService.getShoppingCartByUser(user);
-        List<Order> orderList = orderService.findUserOrders(user);
 
         Long countProduct   = productService.countAllProduct();
         BigDecimal maxLen   = productService.showMaxLength();
@@ -68,17 +74,16 @@ public class ProductController {
         BigDecimal maxPrice = productService.showMaxPrice();
         BigDecimal minPrice = productService.showMinPrice();
 
-       servletContext.setAttribute(SessionConstant.MAX_LEN.toString(), maxLen.toPlainString());
-       servletContext.setAttribute(SessionConstant.MIN_LEN.toString(), minLen.toPlainString());
-       servletContext.setAttribute(SessionConstant.MAX_HEI.toString(), maxHei.toPlainString());
-       servletContext.setAttribute(SessionConstant.MIN_HEI.toString(), minHei.toPlainString());
-       servletContext.setAttribute(SessionConstant.MAX_WID.toString(), maxWid.toPlainString());
-       servletContext.setAttribute(SessionConstant.MIN_WID.toString(), minWid.toPlainString());
-       servletContext.setAttribute(SessionConstant.MAX_PRICE.toString(), maxPrice.toPlainString());
-       servletContext.setAttribute(SessionConstant.MIN_PRICE.toString(), minPrice.toPlainString());
-       servletContext.setAttribute(SessionConstant.COUNT_PRODUCT.toString(), countProduct);
+        servletContext.setAttribute(SessionConstant.MAX_LEN.toString(), maxLen.toPlainString());
+        servletContext.setAttribute(SessionConstant.MIN_LEN.toString(), minLen.toPlainString());
+        servletContext.setAttribute(SessionConstant.MAX_HEI.toString(), maxHei.toPlainString());
+        servletContext.setAttribute(SessionConstant.MIN_HEI.toString(), minHei.toPlainString());
+        servletContext.setAttribute(SessionConstant.MAX_WID.toString(), maxWid.toPlainString());
+        servletContext.setAttribute(SessionConstant.MIN_WID.toString(), minWid.toPlainString());
+        servletContext.setAttribute(SessionConstant.MAX_PRICE.toString(), maxPrice.toPlainString());
+        servletContext.setAttribute(SessionConstant.MIN_PRICE.toString(), minPrice.toPlainString());
+        servletContext.setAttribute(SessionConstant.COUNT_PRODUCT.toString(), countProduct);
 
-        model.addAttribute(SessionConstant.ORDER_LIST.toString(), orderList);
         model.addAttribute(SessionConstant.PRODUCT_LIST.toString(), productList);
         SessionUtil.setCurrentShoppingCart(session, shoppingCart);
         SessionUtil.setCurrentUser(session, user);

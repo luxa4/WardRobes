@@ -86,4 +86,9 @@ public class OrderServiceImpl implements OrderService {
     public Order findOrderById(long id) {
         return orderRepository.findOrderById(id);
     }
+
+    @Override
+    public boolean existOrdersByUser(User user) {
+        return orderRepository.findAllByUser(user).isEmpty() ? false : true;
+    }
 }
