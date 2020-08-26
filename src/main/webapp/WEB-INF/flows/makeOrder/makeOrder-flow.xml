@@ -18,8 +18,8 @@
     </view-state>
 
     <view-state id="collectShippingAddress" model="address" >
-        <transition on="back" to="productsForOrder" />
-        <transition on="next" to="orderInfo" />
+        <transition on="back" to="productsForOrder"  />
+        <transition on="next" to="orderInfo" validate="true"/>
     </view-state>
 
     <view-state id="orderInfo" model="{user, shoppingCart, address}">

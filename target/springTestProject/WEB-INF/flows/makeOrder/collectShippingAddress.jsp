@@ -28,32 +28,67 @@
                         <input type="hidden" name="_flowExecutionKey" value="${flowExecutionKey}">
                         <div class="form-group">
                             <label>Recipient</label>
+                            <c:if test="${flowRequestContext.messageContext.hasErrorMessages()}" >
+                                <c:forEach items="${flowRequestContext.messageContext.getMessagesBySource('recipient')}" var="message" >
+                                    <span class="text-danger" ><b>(${message.text})</b></span>
+                                </c:forEach>
+                            </c:if>
                             <spring:input path="recipient"  type="text" class="form-control" />
                         </div>
 
                         <div class="form-group">
                             <label>Index</label>
+                                <c:if test="${flowRequestContext.messageContext.hasErrorMessages()}" >
+                                   <c:forEach items="${flowRequestContext.messageContext.getMessagesBySource('index')}" var="message" >
+                                       <span class="text-danger" ><b>(${message.text})</b></span>
+                                   </c:forEach>
+                                </c:if>
                             <spring:input path="index"  type="text" class="form-control" />
                         </div>
 
                         <div class="form-group">
                             <label>Region</label>
+                            <c:if test="${flowRequestContext.messageContext.hasErrorMessages()}" >
+                                <c:forEach items="${flowRequestContext.messageContext.getMessagesBySource('region')}" var="message" >
+                                    <span class="text-danger" ><b>(${message.text})</b></span>
+                                </c:forEach>
+                            </c:if>
                             <spring:input path="region" type="text" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>City</label>
+                            <c:if test="${flowRequestContext.messageContext.hasErrorMessages()}" >
+                                <c:forEach items="${flowRequestContext.messageContext.getMessagesBySource('city')}" var="message" >
+                                    <span class="text-danger" ><b>(${message.text})</b></span>
+                                </c:forEach>
+                            </c:if>
                             <spring:input path="city" type="text" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>Street</label>
+                            <c:if test="${flowRequestContext.messageContext.hasErrorMessages()}" >
+                                <c:forEach items="${flowRequestContext.messageContext.getMessagesBySource('street')}" var="message" >
+                                    <span class="text-danger" ><b>(${message.text})</b></span>
+                                </c:forEach>
+                            </c:if>
                             <spring:input path="street" type="text" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>House</label>
+                            <c:if test="${flowRequestContext.messageContext.hasErrorMessages()}" >
+                                <c:forEach items="${flowRequestContext.messageContext.getMessagesBySource('house')}" var="message" >
+                                    <span class="text-danger" ><b>(${message.text})</b></span>
+                                </c:forEach>
+                            </c:if>
                             <spring:input path="homeNumber" type="text" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label>Flat</label>
+                            <c:if test="${flowRequestContext.messageContext.hasErrorMessages()}" >
+                                <c:forEach items="${flowRequestContext.messageContext.getMessagesBySource('flat')}" var="message" >
+                                    <span class="text-danger" ><b>(${message.text})</b></span>
+                                </c:forEach>
+                            </c:if>
                             <spring:input path="flat" type="text" class="form-control" />
                         </div>
                         <a href="${flowExecutionUrl}&_eventId=cancel" class="btn btn-primary">Cancel</a>

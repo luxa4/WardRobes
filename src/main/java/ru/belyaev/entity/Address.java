@@ -1,6 +1,11 @@
 package ru.belyaev.entity;
 
+import org.springframework.binding.message.MessageBuilder;
+import org.springframework.binding.message.MessageContext;
+import org.springframework.binding.validation.ValidationContext;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -99,6 +104,39 @@ public class Address implements Serializable {
 
     public void setRecipient(String recipient) {
         this.recipient = recipient;
+    }
+
+    public void validateCollectShippingAddress(ValidationContext context) {
+        MessageContext messages = context.getMessageContext();
+        if (recipient.isEmpty()) {
+            messages.addMessage(new MessageBuilder().error().source("recipient").
+                    defaultText("Recipient is required").build());
+        }
+        if (index ==null) {
+            messages.addMessage(new MessageBuilder().error().source("index").
+                    defaultText("index is required").build());
+        }
+        if (region.isEmpty()) {
+            messages.addMessage(new MessageBuilder().error().source("region").
+                    defaultText("Region is required ").build());
+        }
+        if (city.isEmpty()) {
+            messages.addMessage(new MessageBuilder().error().source("city").
+                    defaultText("City is required").build());
+        }
+        if (street.isEmpty()) {
+            messages.addMessage(new MessageBuilder().error().source("street").
+                    defaultText("Street is required").build());
+        }
+        if (homeNumber.isEmpty()) {
+            messages.addMessage(new MessageBuilder().error().source("house").
+                    defaultText("House number is required").build());
+        }
+        if (flat==null) {
+            messages.addMessage(new MessageBuilder().error().source("flat").
+                    defaultText("Flat number is required").build());
+        }
+
     }
 
     @Override
