@@ -5,6 +5,7 @@
         $('.removeFromProductToCart').click(removeFromProductToCart);
         $('#showResult').click(showResult);
 
+        //Sliders
         var minLen  = $('#polzunok-length-min').attr('data-min');
         var maxLen  = $('#polzunok-length-max').attr('data-max');
         var minWid  = $('#polzunok-width-min').attr('data-min');
@@ -14,18 +15,32 @@
         var minPrice = $('#polzunok-price-min').attr('data-min');
         var maxPrice = $('#polzunok-price-max').attr('data-max');
 
-        //Slider -5
-        $(".polzunok-5").slider({
+        sliderFilter(5, minLen, maxLen);
+        sliderFilter(4, minWid, maxWid);
+        sliderFilter(3, minHei, maxHei);
+        sliderFilter(2, minPrice, maxPrice);
+
+        var i;
+        for (i = 2; i < 6; i++) {
+            $(".polzunok-input-" + i + "-left").val($(".polzunok-" + i).slider("values", 0));
+            $(".polzunok-input-" + i + "-right").val($(".polzunok-" + i).slider("values", 1));
+            $(".polzunok-input-" + i + "-left").attr("data-value", $(".polzunok-" + i).slider("values", 0));
+            $(".polzunok-input-" + i + "-right").attr("data-value", $(".polzunok-" + i).slider("values", 1));
+        }
+    };
+
+    function sliderFilter(number, minV, maxV) {
+        $(".polzunok-"+number).slider({
             min: 0,
-            max: maxLen,
-            values: [minLen, maxLen], // Default значения ползунков
+            max: parseFloat(maxV) + 6.00,
+            values: [minV, parseFloat(maxV) + 1.00], // Default значения ползунков
             range: true,  // если было бы FALSE - был бы один полузунок
             animate: "fast",
             slide : function(event, ui) {
-                $(".polzunok-input-5-left").val(ui.values[0]);
-                $(".polzunok-input-5-right").val(ui.values[1]);
-                $(".polzunok-input-5-left").attr("data-value", ui.values[0]);
-                $(".polzunok-input-5-right").attr("data-value", ui.values[1]);
+                $(".polzunok-input-" + number + "-left").val(ui.values[0]);
+                $(".polzunok-input-" + number + "-right").val(ui.values[1]);
+                $(".polzunok-input-" + number + "-left").attr("data-value", ui.values[0]);
+                $(".polzunok-input-" + number + "-right").attr("data-value", ui.values[1]);
             },
             stop: function(event, ui){
                 var minLen  = $('#polzunok-length-min').attr('data-value');
@@ -55,165 +70,7 @@
                     },
                 });
             }
-        });
-
-        $(".polzunok-input-5-left").val($(".polzunok-5").slider("values", 0));
-        $(".polzunok-input-5-right").val($(".polzunok-5").slider("values", 1));
-        $(".polzunok-input-5-left").attr("data-value", $(".polzunok-5").slider("values", 0));
-        $(".polzunok-input-5-right").attr("data-value", $(".polzunok-5").slider("values", 1));
-
-
-        // Slider-4
-        $(".polzunok-4").slider({
-                min: 0,
-                max: maxWid,
-                values: [minWid, maxWid],
-                range: true,
-                animate: "fast",
-                slide : function(event, ui) {    
-                    $(".polzunok-input-4-left").val(ui.values[ 0 ]);
-                    $(".polzunok-input-4-right").val(ui.values[ 1 ]);
-                    $(".polzunok-input-4-left").attr("data-value", ui.values[0]);
-                    $(".polzunok-input-4-right").attr("data-value", ui.values[1]);
-
-                },
-                stop: function (event, ui){
-                    var minLen  = $('#polzunok-length-min').attr('data-value');
-                    var maxLen  = $('#polzunok-length-max').attr('data-value');
-                    var minWidth  = $('#polzunok-width-min').attr('data-value');
-                    var maxWidth  = $('#polzunok-width-max').attr('data-value');
-                    var minHeight  = $('#polzunok-height-min').attr('data-value');
-                    var maxHeight  = $('#polzunok-height-max').attr('data-value');
-                    var minPrice = $('#polzunok-price-min').attr('data-value');
-                    var maxPrice = $('#polzunok-price-max').attr('data-value');
-
-                    $.ajax({
-                        url:'/searchButtonCount',
-                        type:'GET',
-                        data: {
-                            minLen: minLen,
-                            maxLen: maxLen,
-                            minWidth: minWidth,
-                            maxWidth: maxWidth,
-                            minHeight: minHeight,
-                            maxHeight: maxHeight,
-                            minPrice: minPrice,
-                            maxPrice: maxPrice,
-                        },
-                        success: function(jsonCart) {
-                            $('#filterResult').html(' (' + jsonCart.totalCount + ' шт)');
-                        },
-                    });
-                }
-        });
-
-        $(".polzunok-input-4-left").val($(".polzunok-4").slider("values", 0));
-        $(".polzunok-input-4-right").val($(".polzunok-4").slider("values", 1));
-        $(".polzunok-input-4-left").attr("data-value", $(".polzunok-4").slider("values", 0));
-        $(".polzunok-input-4-right").attr("data-value", $(".polzunok-4").slider("values", 1));
-
-
-        //Slider-3
-        $(".polzunok-3").slider({
-                min: 0,
-                max: maxHei,
-                values: [minHei, maxHei],
-                range: true,
-                animate: "fast",
-                slide : function(event, ui) {    
-                    $(".polzunok-input-3-left").val(ui.values[ 0 ]);
-                    $(".polzunok-input-3-right").val(ui.values[ 1 ]);
-                    $(".polzunok-input-3-left").attr("data-value", ui.values[0]);
-                    $(".polzunok-input-3-right").attr("data-value", ui.values[1]);
-
-                },
-                stop: function (event, ui){
-                    var minLen  = $('#polzunok-length-min').attr('data-value');
-                    var maxLen  = $('#polzunok-length-max').attr('data-value');
-                    var minWidth  = $('#polzunok-width-min').attr('data-value');
-                    var maxWidth  = $('#polzunok-width-max').attr('data-value');
-                    var minHeight  = $('#polzunok-height-min').attr('data-value');
-                    var maxHeight  = $('#polzunok-height-max').attr('data-value');
-                    var minPrice = $('#polzunok-price-min').attr('data-value');
-                    var maxPrice = $('#polzunok-price-max').attr('data-value');
-
-                    $.ajax({
-                        url:'/searchButtonCount',
-                        type:'GET',
-                        data: {
-                            minLen: minLen,
-                            maxLen: maxLen,
-                            minWidth: minWidth,
-                            maxWidth: maxWidth,
-                            minHeight: minHeight,
-                            maxHeight: maxHeight,
-                            minPrice: minPrice,
-                            maxPrice: maxPrice,
-                        },
-                        success: function(jsonCart) {
-                            $('#filterResult').html(' (' + jsonCart.totalCount + ' шт)');
-                        },
-                    });
-                }
-        });
-
-        $(".polzunok-input-3-left").val($(".polzunok-3").slider("values", 0));
-        $(".polzunok-input-3-right").val($(".polzunok-3").slider("values", 1));
-        $(".polzunok-input-3-left").attr("data-value", $(".polzunok-3").slider("values", 0));
-        $(".polzunok-input-3-right").attr("data-value", $(".polzunok-3").slider("values", 1));
-
-
-
-        //Slider-2
-        $(".polzunok-2").slider({
-                min: 0,
-                max: maxPrice,
-                values: [minPrice, maxPrice],
-                range: true,
-                animate: "fast",
-                slide : function(event, ui) {    
-                    $(".polzunok-input-2-left").val(ui.values[ 0 ]);
-                    $(".polzunok-input-2-right").val(ui.values[ 1 ]);
-                    $(".polzunok-input-2-left").attr("data-value", ui.values[0]);
-                    $(".polzunok-input-2-right").attr("data-value", ui.values[1]);
-                },
-                stop: function (event, ui){
-                    var minLen  = $('#polzunok-length-min').attr('data-value');
-                    var maxLen  = $('#polzunok-length-max').attr('data-value');
-                    var minWidth  = $('#polzunok-width-min').attr('data-value');
-                    var maxWidth  = $('#polzunok-width-max').attr('data-value');
-                    var minHeight  = $('#polzunok-height-min').attr('data-value');
-                    var maxHeight  = $('#polzunok-height-max').attr('data-value');
-                    var minPrice = $('#polzunok-price-min').attr('data-value');
-                    var maxPrice = $('#polzunok-price-max').attr('data-value');
-
-
-                    $.ajax({
-                        url:'/searchButtonCount',
-                        type:'GET',
-                        data: {
-                            minLen: minLen,
-                            maxLen: maxLen,
-                            minWidth: minWidth,
-                            maxWidth: maxWidth,
-                            minHeight: minHeight,
-                            maxHeight: maxHeight,
-                            minPrice: minPrice,
-                            maxPrice: maxPrice,
-                        },
-                        success: function(jsonCart) {
-                            $('#filterResult').html(' (' + jsonCart.totalCount + ' шт)');
-                        },
-                    });
-                }
-
-        });
-
-        $(".polzunok-input-2-left").val($(".polzunok-2").slider("values", 0));
-        $(".polzunok-input-2-right").val($(".polzunok-2").slider("values", 1));
-        $(".polzunok-input-2-left").attr("data-value", $(".polzunok-2").slider("values", 0));
-        $(".polzunok-input-2-right").attr("data-value", $(".polzunok-2").slider("values", 1));
-
+         })
     };
 
     var addProductToCart = function(){
@@ -285,8 +142,7 @@
             },
             success: function(html) {
                 $('#content').html(html);
-                // $('#'+productId).remove();
-
+                $('#'+productId).remove();
             },
         });
     };
