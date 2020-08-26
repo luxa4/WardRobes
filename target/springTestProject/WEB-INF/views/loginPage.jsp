@@ -25,13 +25,15 @@
                <div class="card-body">
                    <spring:form action="/authentication" method="post" >
                        <div class="form-group">
-                           <label for="exampleInputEmail1">User name</label>
-                           <input type="text" class="form-control" id="exampleInputEmail1" name="username">
-                               <%--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>--%>
+                           <label for="exampleInputName">User: </label>
+                           <c:if test="${param.error !=null}">
+                               <span class="text-danger"> Invalid error or password!</span>
+                           </c:if>
+                           <input name="username" id="exampleInputName" class="form-control"/>
                        </div>
                        <div class="form-group">
-                           <label for="exampleInputPassword1">Password</label>
-                           <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+                           <label for="exampleInputPassword1">Password: </label>
+                           <input name="password" type="password" id="exampleInputPassword1" class="form-control"/>
                        </div>
                        <div class="container-fluid" >
                            <div class="row align-items-center justify-content-between" >

@@ -8,6 +8,9 @@
 package ru.belyaev.entity;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,12 +24,16 @@ public class User implements Serializable {
     private Integer id;
 
     @Column
+    @NotNull(message = "can not be empty")
     private String name;
 
     @Column
+    @NotNull(message = "can not be empty")
     private String password;
 
     @Column
+    @Pattern(regexp ="[a-zA-Z0-9]{2,10}+@+[a-zA-Z0-9]{2,10}+\\.+[a-zA-Z]{2,4}", message = "incorrect format email")
+    @NotNull(message = "can not be empty")
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

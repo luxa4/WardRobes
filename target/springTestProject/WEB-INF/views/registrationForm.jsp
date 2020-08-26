@@ -25,19 +25,28 @@
                 <div class="card-body">
                     <spring:form method="post" action="/registration" modelAttribute="UserFromRegistrationForm" >
                         <div class="form-group">
-                            <label>User name</label>
+                            <label>Login: </label>
+                            <c:if test="${mymsg !=null}">
+                                <span class="text-danger"> ${mymsg}</span>
+                            </c:if>
+                            <spring:errors path="name" cssClass="text-danger"/>
                             <spring:input path="name" class="form-control"/>
                         </div>
                         <div class="form-group">
-                            <label>Email</label>
+                            <label>Email: </label>
+                            <spring:errors path="email" cssClass="text-danger" />
                             <spring:input path="email" class="form-control"/>
                         </div>
                         <div class="form-group">
-                            <label>Password</label>
+                            <label>Password: </label>
+                            <spring:errors path="password" cssClass="text-danger"/>
                             <spring:input path="password" type="password" class="form-control"/>
                         </div>
                         <div class="container-fluid" >
-                            <div class="row align-items-center justify-content-center" >
+                            <div class="row align-items-center justify-content-between" >
+                                <div>
+                                    <a href="/login" class="text-primary text-left" >Sign in instead"</a>
+                                </div>
                                 <div>
                                     <button type="submit" class="btn btn-primary ">Registration</button>
                                 </div>
