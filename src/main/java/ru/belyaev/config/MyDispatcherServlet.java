@@ -9,6 +9,10 @@ package ru.belyaev.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+
 public class MyDispatcherServlet extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override

@@ -45,7 +45,7 @@
                         <div class="container-fluid" >
                             <div class="row align-items-center justify-content-between" >
                                 <div>
-                                    <a href="/login" class="text-primary text-left" >Sign in instead"</a>
+                                    <a href="/login" class="text-primary text-left">Sign in instead</a>
                                 </div>
                                 <div>
                                     <button type="submit" class="btn btn-primary ">Registration</button>

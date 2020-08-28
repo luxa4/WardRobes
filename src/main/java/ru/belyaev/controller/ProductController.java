@@ -10,11 +10,13 @@ package ru.belyaev.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
+import ru.belyaev.constant.SessionConstant;
 import ru.belyaev.entity.Order;
 import ru.belyaev.entity.Product;
 import ru.belyaev.entity.ShoppingCart;
@@ -23,10 +25,11 @@ import ru.belyaev.service.OrderService;
 import ru.belyaev.service.ProductService;
 import ru.belyaev.service.ShoppingCartService;
 import ru.belyaev.service.UserService;
-import ru.belyaev.constant.SessionConstant;
 import ru.belyaev.util.SessionUtil;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
@@ -97,7 +100,12 @@ public class ProductController {
         return "oneProductPage";
     }
 
-
-
-
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleError(HttpServletResponse resp) {
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("status", resp.SC_NOT_FOUND);
+        System.out.println(resp.getStatus());
+        mav.setViewName("errorPage");
+        return mav;
+    }
 }
